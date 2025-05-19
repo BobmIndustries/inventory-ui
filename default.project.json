@@ -1,0 +1,17 @@
+{
+	"name": "inventory",
+	"globIgnorePaths": ["**/package.json", "**/tsconfig.json"],
+	"emitLegacyScripts": false,
+	"tree": {
+		"$path": "out",
+		"include": {
+			"$path": "include",
+			"node_modules": {
+				"$className": "Folder",
+				"@rbxts": {
+					"$path": "node_modules/@rbxts"
+				}
+			}
+		}
+	}
+}
