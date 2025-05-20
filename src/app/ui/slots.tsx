@@ -65,18 +65,18 @@ function Slot({ slot }: { slot: number }) {
 						playSound(soundIds.equip);
 
 						if (selecting === undefined) {
-							if (equipped[slot] !== undefined) {
+							if (equipped[slot] !== -1) {
 								producer.unequipItem(tostring(Players.LocalPlayer.UserId), slot);
 
 								remotes.unequipItem(slot);
 							}
 
 							return;
-						}
-
-						// If this slot is already occupied
-						if (equipped[slot] !== undefined) {
-							return;
+						} else {
+							// If this slot is already occupied
+							if (equipped[slot] !== -1) {
+								return;
+							}
 						}
 
 						producer.equipItem(tostring(Players.LocalPlayer.UserId), selecting, slot);

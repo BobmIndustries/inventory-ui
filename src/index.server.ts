@@ -46,11 +46,25 @@ Players.PlayerAdded.Connect((player) => {
 remotes.equipItem.connect((player, item, slot) => {
 	const { inventory, equipped } = producer.getState((state) => state.inventory[tostring(player.UserId)]);
 
-	if (equipped[slot] !== undefined) {
+	if (equipped[slot] !== -1) {
 		return;
 	}
 
-	if (!(item in inventory)) {
+	const index = inventory.findIndex(({ id }) => id === item);
+
+	if (index === -1) {
+		return;
+	}
+
+	let stack = inventory[index].stack;
+
+	for (const id of equipped) {
+		if (id === item) {
+			stack--;
+		}
+	}
+
+	if (stack < 1) {
 		return;
 	}
 
@@ -68,18 +82,14 @@ remotes.equipItem.connect((player, item, slot) => {
 });
 
 remotes.unequipItem.connect((player, slot) => {
-	const { inventory, equipped } = producer.getState((state) => state.inventory[tostring(player.UserId)]);
+	const { equipped } = producer.getState((state) => state.inventory[tostring(player.UserId)]);
 	const item = equipped[slot];
 
 	if (!player.Character) {
 		return;
 	}
 
-	if (item === undefined) {
-		return;
-	}
-
-	if (!(item in inventory)) {
+	if (item === -1) {
 		return;
 	}
 

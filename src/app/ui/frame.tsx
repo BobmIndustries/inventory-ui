@@ -25,7 +25,7 @@ export function Frame() {
 			return items;
 		}
 
-		for (const [id, { name, stack }] of pairs(inventory)) {
+		for (const { id, name, stack } of inventory) {
 			let stackDisplay = stack;
 
 			for (const equip of equipped) {
@@ -34,7 +34,7 @@ export function Frame() {
 				}
 			}
 
-			if (stackDisplay <= 0) {
+			if (stackDisplay < 1) {
 				continue;
 			}
 

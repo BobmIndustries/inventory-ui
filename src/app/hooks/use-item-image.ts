@@ -6,7 +6,7 @@ export function useItemImage(id?: number) {
 	const [imageId, setImageId] = useState<string>();
 
 	useEffect(() => {
-		if (id === undefined) {
+		if (id === -1) {
 			setImageId(undefined);
 			return;
 		}

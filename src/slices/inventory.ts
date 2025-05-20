@@ -1,10 +1,12 @@
-import { createProducer } from "@rbxts/reflex";
+import Object from "@rbxts/object-utils";
+import { createProducer, createSelector } from "@rbxts/reflex";
+import { RootState } from "producer";
 import { ItemList } from "typedefs";
 
 interface Inventory {
 	selecting?: number;
 
-	inventory: Record<number, { name: string; stack: number }>;
+	inventory: ItemList;
 
 	/** Indexed from 0-5 */
 	equipped: number[];
@@ -12,12 +14,19 @@ interface Inventory {
 
 const INITIAL_STATE: Record<string, Inventory> = {};
 
+/** Returns the index of the item in `inventory`, else -1 if not found */
+export const selectItemFromId = (player: string, id: number) =>
+	createSelector(
+		(state: RootState) => state.inventory[player].inventory,
+		(list) => list.findIndex((item) => item.id === id),
+	);
+
 export const inventory = createProducer(INITIAL_STATE, {
 	addPlayer: (state, player: string) => ({
 		...state,
 		[player]: {
-			inventory: {},
-			equipped: [],
+			inventory: [],
+			equipped: new Array(6, -1),
 		},
 	}),
 
@@ -38,10 +47,23 @@ export const inventory = createProducer(INITIAL_STATE, {
 	}),
 
 	setInventory: (state, player: string, items: ItemList) => {
-		const inventory = {} as Inventory["inventory"];
+		return {
+			...state,
+			[player]: {
+				...state[player],
+				inventory: Object.deepCopy(items),
+			},
+		};
+	},
 
-		for (const item of items) {
-			inventory[item.id] = { name: item.name, stack: item.stack };
+	addItem: (state, player: string, item: { id: number; name: string }, stack: number = 1) => {
+		const inventory = [...state[player].inventory];
+		const index = state[player].inventory.findIndex(({ id }) => item.id === id);
+
+		if (index !== -1) {
+			inventory[index] = { id: item.id, name: item.name, stack: state[player].inventory[item.id].stack + stack };
+		} else {
+			inventory.push({ id: item.id, name: item.name, stack });
 		}
 
 		return {
@@ -53,20 +75,10 @@ export const inventory = createProducer(INITIAL_STATE, {
 		};
 	},
 
-	addItem: (state, player: string, item: { id: number; name: string }, stack: number = 1) => ({
-		...state,
-
-		[player]: {
-			...state[player],
-			inventory: {
-				...state[player].inventory,
-				[item.id]: { name: item.name, stack: state[player].inventory[item.id].stack ?? 0 + stack },
-			},
-		},
-	}),
-
 	equipItem: (state, player: string, item: number, slot: number) => {
-		if (!(item in state[player].inventory)) {
+		const index = state[player].inventory.findIndex(({ id }) => item === id);
+
+		if (index === -1) {
 			return state;
 		}
 
@@ -86,7 +98,7 @@ export const inventory = createProducer(INITIAL_STATE, {
 	unequipItem: (state, player: string, slot: number) => {
 		const equipped = [...state[player].equipped];
 
-		delete equipped[slot];
+		equipped[slot] = -1;
 
 		return {
 			...state,
@@ -98,16 +110,18 @@ export const inventory = createProducer(INITIAL_STATE, {
 	},
 
 	removeItem: (state, player: string, item: number, stack: number = 1) => {
-		if (!(item in state[player].inventory)) {
+		const index = state[player].inventory.findIndex(({ id }) => item === id);
+
+		if (index === -1) {
 			return state;
 		}
 
-		const inventory = { ...state[player].inventory };
+		const inventory = [...state[player].inventory];
 
-		if (inventory[item].stack <= stack) {
-			delete inventory[item];
+		if (inventory[index].stack <= stack) {
+			delete inventory[index];
 		} else {
-			inventory[item].stack -= stack;
+			inventory[index].stack -= stack;
 		}
 
 		return {
