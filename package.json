@@ -24,6 +24,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@rbxts/gamejoy": "^1.1.4",
     "@rbxts/object-utils": "^1.0.4",
     "@rbxts/pretty-react-hooks": "^0.6.2",
     "@rbxts/react": "^0.4.0",

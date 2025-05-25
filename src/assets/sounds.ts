@@ -7,10 +7,18 @@ export const soundIds = {
 };
 
 export function playSound(id: string) {
-	const sound = new Instance("Sound");
+	const sound = new Instance("AudioPlayer");
+	const emitter = new Instance("AudioEmitter");
+	const wire = new Instance("Wire");
 
-	sound.SoundId = id;
+	wire.SourceInstance = sound;
+	wire.TargetInstance = emitter;
+	wire.Parent = sound;
+
+	sound.Asset = id;
 	sound.Parent = SoundService;
+
+	emitter.Parent = SoundService;
 
 	sound.Play();
 

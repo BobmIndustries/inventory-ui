@@ -26,7 +26,7 @@ export const inventory = createProducer(INITIAL_STATE, {
 		...state,
 		[player]: {
 			inventory: [],
-			equipped: new Array(6, -1),
+			equipped: [],
 		},
 	}),
 
@@ -75,7 +75,7 @@ export const inventory = createProducer(INITIAL_STATE, {
 		};
 	},
 
-	equipItem: (state, player: string, item: number, slot: number) => {
+	equipItem: (state, player: string, item: number) => {
 		const index = state[player].inventory.findIndex(({ id }) => item === id);
 
 		if (index === -1) {
@@ -84,7 +84,7 @@ export const inventory = createProducer(INITIAL_STATE, {
 
 		const equipped = [...state[player].equipped];
 
-		equipped[slot] = item;
+		equipped.push(item);
 
 		return {
 			...state,
@@ -95,10 +95,16 @@ export const inventory = createProducer(INITIAL_STATE, {
 		};
 	},
 
-	unequipItem: (state, player: string, slot: number) => {
+	unequipItem: (state, player: string, item: number) => {
+		const index = state[player].equipped.findIndex((id) => id === item);
+
+		if (index === -1) {
+			return state;
+		}
+
 		const equipped = [...state[player].equipped];
 
-		equipped[slot] = -1;
+		equipped.remove(index);
 
 		return {
 			...state,

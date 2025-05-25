@@ -12,7 +12,7 @@ export function OpenButton() {
 			BackgroundColor3={Color3.fromRGB(100, 100, 100)}
 			BorderColor3={Color3.fromRGB(27, 42, 53)}
 			ClipsDescendants={true}
-			Font={Enum.Font.Unknown}
+			FontFace={new Font("rbxassetid://12187360881")}
 			Position={new UDim2(0, 5, 1, -160)}
 			Size={new UDim2(0, 220, 0, 35)}
 			Text="Inventory"
@@ -24,7 +24,7 @@ export function OpenButton() {
 			ZIndex={0}
 			Event={{
 				MouseButton1Click: () => {
-					const visible = !producer.getState().visible;
+					const visible = !producer.getState().ui.visible;
 
 					producer.setVisible(visible);
 

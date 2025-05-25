@@ -12,6 +12,6 @@ export const dataCheck = t.array(
 export const remotes = createRemotes({
 	initInventory: remote<Client, [inventory: string]>(t.string),
 
-	equipItem: remote<Server, [item: number, slot: number]>(t.numberPositive, t.numberConstrained(0, 5)),
-	unequipItem: remote<Server, [slot: number]>(t.numberConstrained(0, 5)),
+	equipItem: remote<Server, [item: number]>(t.numberPositive),
+	unequipItem: remote<Server, [item: number]>(t.numberPositive),
 });

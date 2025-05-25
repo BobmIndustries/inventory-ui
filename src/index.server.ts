@@ -43,10 +43,10 @@ Players.PlayerAdded.Connect((player) => {
 	});
 });
 
-remotes.equipItem.connect((player, item, slot) => {
+remotes.equipItem.connect((player, item) => {
 	const { inventory, equipped } = producer.getState((state) => state.inventory[tostring(player.UserId)]);
 
-	if (equipped[slot] !== -1) {
+	if (equipped.includes(item)) {
 		return;
 	}
 
@@ -56,23 +56,11 @@ remotes.equipItem.connect((player, item, slot) => {
 		return;
 	}
 
-	let stack = inventory[index].stack;
-
-	for (const id of equipped) {
-		if (id === item) {
-			stack--;
-		}
-	}
-
-	if (stack < 1) {
-		return;
-	}
-
 	const tool = findTool(ReplicatedStorage.items, item)?.Clone();
 
 	assert(tool, `Tool ${item} not found in ReplicatedStorage.items`);
 
-	producer.equipItem(tostring(player.UserId), item, slot);
+	producer.equipItem(tostring(player.UserId), item);
 
 	const backpack = player.FindFirstChild("Backpack") as Backpack;
 
@@ -81,9 +69,12 @@ remotes.equipItem.connect((player, item, slot) => {
 	tool.Parent = backpack;
 });
 
-remotes.unequipItem.connect((player, slot) => {
+remotes.unequipItem.connect((player, item) => {
 	const { equipped } = producer.getState((state) => state.inventory[tostring(player.UserId)]);
-	const item = equipped[slot];
+
+	if (!equipped.includes(item)) {
+		return;
+	}
 
 	if (!player.Character) {
 		return;
@@ -105,5 +96,5 @@ remotes.unequipItem.connect((player, slot) => {
 
 	tool?.Destroy();
 
-	producer.unequipItem(tostring(player.UserId), slot);
+	producer.unequipItem(tostring(player.UserId), item);
 });
