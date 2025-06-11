@@ -11,70 +11,49 @@ export function OpenButton() {
 
 	return (
 		<textbutton
-			AnchorPoint={new Vector2(0, 1)}
-			BackgroundColor3={Color3.fromRGB(100, 100, 100)}
-			BorderColor3={Color3.fromRGB(27, 42, 53)}
-			ClipsDescendants={true}
-			FontFace={new Font("rbxassetid://12187360881")}
-			Position={new UDim2(0, 5, 1, -160)}
-			Size={new UDim2(0, px(180), 0, px(28))}
-			Text="Inventory"
+			AnchorPoint={new Vector2(0, 0)}
+			BackgroundColor3={Color3.fromRGB(0, 85, 0)}
+			BorderSizePixel={0}
+			FontFace={new Font("rbxasset://fonts/families/Inconsolata.json", Enum.FontWeight.Bold)}
+			Position={new UDim2(0.818, 0, 0.656, 0)}
+			RichText={true}
+			Size={new UDim2(0.178, 0, 0.066, 0)}
+			Text="INVENTORY"
 			TextColor3={Color3.fromRGB(255, 255, 255)}
 			TextScaled={true}
-			TextSize={px(18)}
-			TextStrokeColor3={Color3.fromRGB(40, 41, 45)}
+			TextSize={14}
 			TextWrapped={true}
-			ZIndex={0}
 			Event={{
 				MouseButton1Click: () => {
 					const visible = !producer.getState().ui.visible;
 
 					producer.setVisible(visible);
 
-					const sound = playSound(soundIds.open);
-
-					if (!visible) {
-						const effect = new Instance("PitchShiftSoundEffect");
-
-						effect.Octave = 0.85;
-						effect.Parent = sound;
-					}
+					// const sound = playSound(soundIds.open);
+					//
+					// if (!visible) {
+					// 	const effect = new Instance("PitchShiftSoundEffect");
+					//
+					// 	effect.Octave = 0.85;
+					// 	effect.Parent = sound;
+					// }
 				},
 			}}
 		>
-			<uipadding
-				PaddingBottom={new UDim(0.1, 0)}
-				PaddingLeft={new UDim(0.1, 0)}
-				PaddingRight={new UDim(0.1, 0)}
-				PaddingTop={new UDim(0.1, 0)}
-			/>
-			<imagelabel
-				AnchorPoint={new Vector2(0.5, 0.5)}
-				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-				BackgroundTransparency={1.01}
-				BorderColor3={Color3.fromRGB(27, 42, 53)}
-				Image="rbxassetid://300134974"
-				ImageTransparency={0.97}
-				Position={new UDim2(0.5, 0, 0.5, 0)}
-				ScaleType={Enum.ScaleType.Tile}
-				Size={new UDim2(2, 0, 2, 0)}
-				SliceCenter={new Rect(0, 256, 0, 256)}
-				TileSize={new UDim2(0, 30, 0, 30)}
-				ZIndex={9}
-			/>
 			<uigradient
 				Color={
 					new ColorSequence([
-						new ColorSequenceKeypoint(0, Color3.fromRGB(138, 138, 138)),
-						new ColorSequenceKeypoint(1, Color3.fromRGB(57, 57, 57)),
+						new ColorSequenceKeypoint(0, Color3.fromRGB(131, 131, 131)),
+						new ColorSequenceKeypoint(1, Color3.fromRGB(255, 255, 255)),
 					])
 				}
+				Rotation={90}
 			/>
+			<uipadding PaddingBottom={new UDim(0, 5)} PaddingTop={new UDim(0, 5)} />
 			<uistroke
 				ApplyStrokeMode={Enum.ApplyStrokeMode.Border}
 				Color={Color3.fromRGB(165, 165, 165)}
-				LineJoinMode={Enum.LineJoinMode.Miter}
-				Thickness={2}
+				Thickness={px(2)}
 			>
 				<uigradient
 					Color={
@@ -83,8 +62,10 @@ export function OpenButton() {
 							new ColorSequenceKeypoint(1, Color3.fromRGB(255, 170, 0)),
 						])
 					}
+					Rotation={-90}
 				/>
 			</uistroke>
+			<uicorner CornerRadius={new UDim(0, px(5))} />
 		</textbutton>
 	);
 }
