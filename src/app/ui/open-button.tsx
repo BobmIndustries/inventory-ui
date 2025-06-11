@@ -1,10 +1,13 @@
 import React from "@rbxts/react";
 import { useProducer } from "@rbxts/react-reflex";
+import { usePx } from "app/hooks/use-px";
 import { playSound, soundIds } from "assets/sounds";
 import { RootProducer } from "producer";
 
 export function OpenButton() {
 	const producer = useProducer<RootProducer>();
+
+	const px = usePx();
 
 	return (
 		<textbutton
@@ -14,11 +17,11 @@ export function OpenButton() {
 			ClipsDescendants={true}
 			FontFace={new Font("rbxassetid://12187360881")}
 			Position={new UDim2(0, 5, 1, -160)}
-			Size={new UDim2(0, 220, 0, 35)}
+			Size={new UDim2(0, px(180), 0, px(28))}
 			Text="Inventory"
 			TextColor3={Color3.fromRGB(255, 255, 255)}
 			TextScaled={true}
-			TextSize={18}
+			TextSize={px(18)}
 			TextStrokeColor3={Color3.fromRGB(40, 41, 45)}
 			TextWrapped={true}
 			ZIndex={0}
@@ -62,8 +65,8 @@ export function OpenButton() {
 			<uigradient
 				Color={
 					new ColorSequence([
-						new ColorSequenceKeypoint(0, Color3.fromRGB(255, 0, 0)),
-						new ColorSequenceKeypoint(1, Color3.fromRGB(255, 170, 0)),
+						new ColorSequenceKeypoint(0, Color3.fromRGB(138, 138, 138)),
+						new ColorSequenceKeypoint(1, Color3.fromRGB(57, 57, 57)),
 					])
 				}
 			/>
@@ -76,7 +79,7 @@ export function OpenButton() {
 				<uigradient
 					Color={
 						new ColorSequence([
-							new ColorSequenceKeypoint(0, Color3.fromRGB(255, 0, 0)),
+							new ColorSequenceKeypoint(0, Color3.fromRGB(85, 255, 127)),
 							new ColorSequenceKeypoint(1, Color3.fromRGB(255, 170, 0)),
 						])
 					}

@@ -1,5 +1,5 @@
 import { useMotion } from "@rbxts/pretty-react-hooks";
-import React, { useEffect, useMemo } from "@rbxts/react";
+import React, { useBinding, useEffect, useMemo } from "@rbxts/react";
 import { useSelector, useSelectorCreator } from "@rbxts/react-reflex";
 import { producer, RootState } from "producer";
 import { Players } from "@rbxts/services";
@@ -11,6 +11,7 @@ import { selectItemFromId } from "slices/inventory";
 import { remotes } from "network";
 import { AnimatedButton } from "./animated-button";
 import { useItemImage } from "app/hooks/use-item-image";
+import { usePx } from "app/hooks/use-px";
 
 export function Frame() {
 	const visible = useSelector((state: RootState) => state.ui.visible);
@@ -27,6 +28,8 @@ export function Frame() {
 	const imageId = useItemImage(selecting ?? -1);
 
 	const [sizeScale, sizeMotion] = useMotion(0);
+
+	const selectingEquipped = useMemo(() => selecting && equipped.includes(selecting), [selecting, equipped]);
 
 	const items = useMemo(() => {
 		const equippedItems: ItemList = [];
@@ -61,6 +64,11 @@ export function Frame() {
 		return [...equippedItems, ...items];
 	}, [inventory, equipped, search]);
 
+	const [size, setSize] = useBinding(new Vector2());
+	const [contentSize, setContentSize] = useBinding(new Vector2());
+
+	const px = usePx();
+
 	useEffect(() => {
 		sizeMotion.spring(visible ? 1 : 0, {
 			tension: 300,
@@ -86,10 +94,11 @@ export function Frame() {
 			AnchorPoint={new Vector2(0.5, 0.5)}
 			BackgroundTransparency={1}
 			Position={UDim2.fromScale(0.5, 0.5)}
-			Size={UDim2.fromScale(0.7, 0.7)}
+			Size={UDim2.fromScale(0.5, 0.5)}
 		>
-			<uiaspectratioconstraint AspectRatio={1.466} />
 			<TitleBar />
+
+			<uiaspectratioconstraint AspectRatio={1.466} />
 			<uiscale Scale={sizeScale} />
 			<frame
 				AnchorPoint={new Vector2(0.5, 0.5)}
@@ -153,18 +162,27 @@ export function Frame() {
 				<uistroke Color={Color3.fromRGB(85, 170, 0)} Thickness={2} />
 				<scrollingframe
 					Active={true}
-					AnchorPoint={new Vector2(0.5, 0.5)}
+					CanvasSize={contentSize.map(({ Y }) => new UDim2(0, 0, 0, Y))}
 					BackgroundTransparency={1}
-					Position={new UDim2(0.317, 0, 0.422, 0)}
+					Position={new UDim2(0.037, 0, 0.037, 0)}
 					ScrollBarImageColor3={Color3.fromRGB(74, 74, 74)}
-					Size={new UDim2(0.5760000000000001, 0, 0.761, 0)}
+					Size={new UDim2(0.576, 0, 0.761, 0)}
+					Change={{
+						AbsoluteSize: (rbx) => {
+							setSize(rbx.AbsoluteSize);
+						},
+					}}
 				>
 					<uigridlayout
-						CellPadding={new UDim2(0.025, 0, 0.01, 0)}
-						CellSize={new UDim2(0.302, 0, 0.134, 0)}
+						CellPadding={size.map((size) => new UDim2(0.015, 0, 0, 0.015 * size.X))}
+						CellSize={size.map((size) => new UDim2(0.23, 0, 0, 0.23 * size.X))}
 						SortOrder={Enum.SortOrder.LayoutOrder}
+						Change={{
+							AbsoluteContentSize: (rbx) => {
+								setContentSize(rbx.AbsoluteContentSize);
+							},
+						}}
 					/>
-					<uiaspectratioconstraint AspectRatio={1.173} />
 					<uipadding
 						PaddingLeft={new UDim(0.01, 0)}
 						PaddingRight={new UDim(0.01, 0)}
@@ -211,7 +229,7 @@ export function Frame() {
 						Text={selectingIndex !== -1 ? inventory[selectingIndex].name : ""}
 						TextColor3={Color3.fromRGB(244, 244, 244)}
 						TextScaled={true}
-						TextSize={14}
+						TextSize={px(14)}
 						TextWrapped={true}
 					>
 						<uistroke Thickness={2} />
@@ -264,10 +282,10 @@ export function Frame() {
 							FontFace={new Font("rbxassetid://12187360881")}
 							Position={new UDim2(0.5, 0, 0.5, 0)}
 							Size={new UDim2(0.8, 0, 0.7000000000000001, 0)}
-							Text={selecting && equipped.includes(selecting) ? "UNEQUIP" : "EQUIP"}
+							Text={selectingEquipped ? "UNEQUIP" : "EQUIP"}
 							TextColor3={Color3.fromRGB(244, 244, 244)}
 							TextScaled={true}
-							TextSize={14}
+							TextSize={px(14)}
 							TextWrapped={true}
 						>
 							<uistroke Thickness={2} />
@@ -323,7 +341,7 @@ export function Frame() {
 					Text="You can only equip <b>9</b> items at a time"
 					TextColor3={Color3.fromRGB(113, 113, 113)}
 					TextScaled={true}
-					TextSize={22}
+					TextSize={px(22)}
 					TextWrapped={true}
 					ZIndex={5}
 				/>
@@ -333,24 +351,6 @@ export function Frame() {
 					PaddingRight={new UDim(0.017, 0)}
 					PaddingTop={new UDim(0.03, 0)}
 				/>
-				<frame
-					AnchorPoint={new Vector2(0.5, 0.5)}
-					BackgroundColor3={Color3.fromRGB(20, 20, 20)}
-					BorderSizePixel={0}
-					Position={new UDim2(0.304, 0, 0.548, 0)}
-					Size={new UDim2(0.54, 0, 0.522, 0)}
-				>
-					<uigradient
-						Rotation={-90}
-						Transparency={
-							new NumberSequence([
-								new NumberSequenceKeypoint(0, 0, 0),
-								new NumberSequenceKeypoint(0.218, 0, 0),
-								new NumberSequenceKeypoint(1, 1, 0),
-							])
-						}
-					/>
-				</frame>
 			</frame>
 		</frame>
 	);

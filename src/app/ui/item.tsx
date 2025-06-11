@@ -19,7 +19,7 @@ export function Item({ id, stack }: { id: number; stack: number }) {
 			Active={false}
 			BackgroundTransparency={1}
 			Selectable={false}
-			Size={new UDim2(0, px(180), 0, px(180))}
+			Size={new UDim2(0, 50, 0, 50)} // Will be overriden by CellSize
 			Event={{
 				MouseButton1Click: () => {
 					playSound(soundIds.equip);
@@ -84,11 +84,12 @@ export function Item({ id, stack }: { id: number; stack: number }) {
 				Size={new UDim2(0.4, 0, 0.2, 0)}
 				Text={tostring(stack)}
 				TextColor3={Color3.fromRGB(255, 255, 255)}
-				TextSize={30}
+				TextSize={px(20)}
 				TextWrapped={true}
 				TextXAlignment={Enum.TextXAlignment.Right}
+				ZIndex={3}
 			>
-				<uistroke Thickness={2} />
+				<uistroke Thickness={px(2)} />
 			</textlabel>
 		</AnimatedButton>
 	);
