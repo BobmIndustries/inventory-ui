@@ -1,7 +1,7 @@
 import React from "@rbxts/react";
 import { useProducer } from "@rbxts/react-reflex";
 import { usePx } from "app/hooks/use-px";
-import { playSound, soundIds } from "assets/sounds";
+// import { playSound, soundIds } from "assets/sounds";
 import { RootProducer } from "producer";
 
 export function OpenButton() {
@@ -10,19 +10,13 @@ export function OpenButton() {
 	const px = usePx();
 
 	return (
-		<textbutton
-			AnchorPoint={new Vector2(0, 0)}
+		<imagebutton
+			AnchorPoint={new Vector2(1, 1)}
 			BackgroundColor3={Color3.fromRGB(0, 85, 0)}
 			BorderSizePixel={0}
-			FontFace={new Font("rbxasset://fonts/families/Inconsolata.json", Enum.FontWeight.Bold)}
-			Position={new UDim2(0.818, 0, 0.656, 0)}
-			RichText={true}
-			Size={new UDim2(0.178, 0, 0.066, 0)}
-			Text="INVENTORY"
-			TextColor3={Color3.fromRGB(255, 255, 255)}
-			TextScaled={true}
-			TextSize={14}
-			TextWrapped={true}
+			Position={new UDim2(1, -120, 1, -160)}
+			Size={new UDim2(0, 50, 0, 50)}
+			Image={"rbxassetid://95086078551706"}
 			Event={{
 				MouseButton1Click: () => {
 					const visible = !producer.getState().ui.visible;
@@ -50,11 +44,7 @@ export function OpenButton() {
 				Rotation={90}
 			/>
 			<uipadding PaddingBottom={new UDim(0, 5)} PaddingTop={new UDim(0, 5)} />
-			<uistroke
-				ApplyStrokeMode={Enum.ApplyStrokeMode.Border}
-				Color={Color3.fromRGB(165, 165, 165)}
-				Thickness={px(2)}
-			>
+			<uistroke ApplyStrokeMode={Enum.ApplyStrokeMode.Border} Color={Color3.fromRGB(165, 165, 165)} Thickness={2}>
 				<uigradient
 					Color={
 						new ColorSequence([
@@ -65,7 +55,7 @@ export function OpenButton() {
 					Rotation={-90}
 				/>
 			</uistroke>
-			<uicorner CornerRadius={new UDim(0, px(5))} />
-		</textbutton>
+			<uicorner CornerRadius={new UDim(0, 5)} />
+		</imagebutton>
 	);
 }
