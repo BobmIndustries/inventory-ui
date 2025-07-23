@@ -1,7 +1,7 @@
 import { useMotion } from "@rbxts/pretty-react-hooks";
 import React, { useBinding, useEffect, useMemo } from "@rbxts/react";
-import { useSelector, useSelectorCreator } from "@rbxts/react-reflex";
-import { producer, RootState } from "producer";
+import { useProducer, useSelector, useSelectorCreator } from "@rbxts/react-reflex";
+import { RootProducer, RootState } from "producer";
 import { Players } from "@rbxts/services";
 import { Item } from "./item";
 import { ItemList } from "typedefs";
@@ -12,10 +12,13 @@ import { remotes } from "network";
 import { AnimatedButton } from "./animated-button";
 import { useItemImage } from "app/hooks/use-item-image";
 import { usePx } from "app/hooks/use-px";
+import { getItemToolFromId } from "lib/utils";
+import { CategoryBar } from "./category-bar";
 
 export function Frame() {
 	const visible = useSelector((state: RootState) => state.ui.visible);
 	const search = useSelector((state: RootState) => state.ui.search);
+	const categorySelected = useSelector((state: RootState) => state.ui.selectedCategory);
 	const inventory = useSelector(
 		(state: RootState) => state.inventory[tostring(Players.LocalPlayer.UserId)]?.inventory,
 	);
@@ -29,7 +32,7 @@ export function Frame() {
 
 	const [sizeScale, sizeMotion] = useMotion(0);
 
-	const selectingEquipped = useMemo(() => selecting && equipped.includes(selecting), [selecting, equipped]);
+	const isSelectingEquipped = useMemo(() => selecting && equipped.includes(selecting), [selecting, equipped]);
 
 	const items = useMemo(() => {
 		const equippedItems: ItemList = [];
@@ -67,6 +70,8 @@ export function Frame() {
 	const [size, setSize] = useBinding(new Vector2());
 	const [contentSize, setContentSize] = useBinding(new Vector2());
 
+	const producer = useProducer<RootProducer>();
+
 	const px = usePx();
 
 	useEffect(() => {
@@ -97,6 +102,7 @@ export function Frame() {
 			Size={UDim2.fromScale(0.5, 0.5)}
 		>
 			<TitleBar />
+			<CategoryBar />
 
 			<uiaspectratioconstraint AspectRatio={1.466} />
 			<uiscale Scale={sizeScale} />
@@ -189,9 +195,17 @@ export function Frame() {
 						PaddingTop={new UDim(0.005, 0)}
 					/>
 
-					{items.mapFiltered(({ id, stack }) => (
-						<Item id={id} stack={stack} />
-					))}
+					{items.mapFiltered(({ id, stack }) => {
+						// This whole function block may not be very performant
+						if (
+							categorySelected !== undefined &&
+							getItemToolFromId(id).itemCategory.Value !== categorySelected
+						) {
+							return;
+						}
+
+						return <Item id={id} stack={stack} />;
+					})}
 				</scrollingframe>
 				<frame
 					AnchorPoint={new Vector2(0.5, 0.5)}
@@ -241,7 +255,6 @@ export function Frame() {
 						BorderSizePixel={0}
 						ClipsDescendants={true}
 						Position={new UDim2(0.5, 0, 1, 0)}
-						Selectable={false}
 						Size={new UDim2(1, 0, 0.1, 0)}
 						Event={{
 							MouseButton1Click: () => {
@@ -282,7 +295,7 @@ export function Frame() {
 							FontFace={new Font("rbxassetid://12187360881")}
 							Position={new UDim2(0.5, 0, 0.5, 0)}
 							Size={new UDim2(0.8, 0, 0.7000000000000001, 0)}
-							Text={selectingEquipped ? "UNEQUIP" : "EQUIP"}
+							Text={isSelectingEquipped ? "UNEQUIP" : "EQUIP"}
 							TextColor3={Color3.fromRGB(244, 244, 244)}
 							TextScaled={true}
 							TextSize={px(14)}

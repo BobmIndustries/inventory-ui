@@ -1,10 +1,10 @@
 import React from "@rbxts/react";
-import { useSelector } from "@rbxts/react-reflex";
+import { useProducer, useSelector } from "@rbxts/react-reflex";
 import { Players } from "@rbxts/services";
 import { useItemImage } from "app/hooks/use-item-image";
 import { usePx } from "app/hooks/use-px";
-import { playSound, soundIds } from "assets/sounds";
-import { producer, RootState } from "producer";
+// import { playSound, soundIds } from "assets/sounds";
+import { RootProducer, RootState } from "producer";
 import { AnimatedButton } from "./animated-button";
 
 export function Item({ id, stack }: { id: number; stack: number }) {
@@ -12,17 +12,18 @@ export function Item({ id, stack }: { id: number; stack: number }) {
 
 	const imageId = useItemImage(id);
 
+	const producer = useProducer<RootProducer>();
+
 	const px = usePx();
 
 	return (
 		<AnimatedButton
 			Active={false}
 			BackgroundTransparency={1}
-			Selectable={false}
 			Size={new UDim2(0, 50, 0, 50)} // Will be overriden by CellSize
 			Event={{
 				MouseButton1Click: () => {
-					playSound(soundIds.equip);
+					// playSound(soundIds.equip);
 
 					producer.setSelecting(tostring(Players.LocalPlayer.UserId), id);
 				},

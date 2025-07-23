@@ -1,7 +1,10 @@
 import React from "@rbxts/react";
-import { producer } from "producer";
+import { useProducer } from "@rbxts/react-reflex";
+import { RootProducer } from "producer";
 
 export function SearchBar() {
+	const producer = useProducer<RootProducer>();
+
 	return (
 		<textbox
 			BackgroundTransparency={1}
