@@ -88,10 +88,6 @@ export function Frame() {
 		context.Bind("E", () => {
 			producer.setVisible(!producer.getState((state) => state.ui.visible));
 		});
-
-		return () => {
-			context.UnbindAll();
-		};
 	}, []);
 
 	return (

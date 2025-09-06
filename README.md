@@ -6,7 +6,7 @@ This open-source project powers the inventory mechanics and user interface for t
 
 ## 🛠️ Building and Compiling
 
-**NOTE:** This project is not intended for use outside of Cone's Claw Center, and is rather purely for code reference or personal educational purposes. Certain hierarchical elements in the local player require external scripts for instantiation and initialization or prior specific StarterGui setup, which this code is not particularly verbose about during runtime.
+**NOTE:** This project is not intended for use outside of Cone's Claw Center, and should rather be used for code reference or personal educational purposes. Certain hierarchical elements in the local player require external scripts for instantiation and initialization or prior specific StarterGui setup, which this code is not particularly verbose about during runtime.
 
 Necessary tools to be installed are [Node.js](https://nodejs.org/en/download/current) and [Rojo](https://github.com/rojo-rbx/rojo/releases)
 

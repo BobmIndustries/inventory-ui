@@ -2,7 +2,7 @@ import { ReplicatedStorage } from "@rbxts/services";
 import { ItemTool } from "typedefs";
 
 export function getItemToolFromId(id: number) {
-	for (const item of ReplicatedStorage.items.GetChildren()) {
+	for (const item of ReplicatedStorage.items.GetDescendants()) {
 		if (!item.IsA("Tool")) {
 			continue;
 		}
