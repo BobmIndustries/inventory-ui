@@ -5,7 +5,7 @@ export function AnimatedButton(props: React.InstanceProps<ImageButton>) {
 	const [hover, setHover] = useState(false);
 	const [press, setPress] = useState(false);
 
-	const [hoverScale, hoverMotion] = useMotion(0);
+	const [hoverScale, hoverMotion] = useMotion(1);
 	const [pressScale, pressMotion] = useMotion(1);
 	const [transparency, transparencyMotion] = useMotion(1);
 

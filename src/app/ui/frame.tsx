@@ -45,7 +45,7 @@ export function Frame() {
 
 		if (search.size() > 0) {
 			for (const { id, name, stack } of inventory) {
-				if (name.lower().sub(1, search.size()) === search.lower()) {
+				if (name.lower().find(search.lower())[0]) {
 					items.push({ id, name, stack });
 				}
 			}
@@ -192,7 +192,7 @@ export function Frame() {
 					/>
 
 					{items.mapFiltered(({ id, stack }) => {
-						// This whole function block may not be very performant
+						// This whole function block may not be very performant because of the getItemToolFromId call
 						if (
 							categorySelected !== undefined &&
 							getItemToolFromId(id).itemCategory.Value !== categorySelected
@@ -200,7 +200,7 @@ export function Frame() {
 							return;
 						}
 
-						return <Item id={id} stack={stack} />;
+						return <Item key={id} id={id} stack={stack} />;
 					})}
 				</scrollingframe>
 				<frame
