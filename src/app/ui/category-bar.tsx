@@ -2,7 +2,7 @@ import React, { useMemo } from "@rbxts/react";
 import { useProducer, useSelector } from "@rbxts/react-reflex";
 import { Players } from "@rbxts/services";
 import { usePx } from "app/hooks/use-px";
-import { getItemToolFromId } from "lib/utils";
+import { getItemConfigFromId } from "lib/utils";
 import { RootProducer, RootState } from "producer";
 
 export function Category({ category }: { category: string }) {
@@ -48,9 +48,9 @@ export function CategoryBar() {
 	const categories = useMemo(() => {
 		const res = new Set<string>();
 
-		// FIXME: O(n^2) time complexity with getItemToolFromId call
+		// FIXME: O(n^2) time complexity with getItemConfigFromId call
 		for (const item of inventory) {
-			res.add(getItemToolFromId(item.id).itemCategory.Value);
+			res.add(getItemConfigFromId(item.id).itemCategory.Value);
 		}
 
 		return res;

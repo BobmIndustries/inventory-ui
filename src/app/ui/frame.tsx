@@ -12,7 +12,7 @@ import { remotes } from "network";
 import { AnimatedButton } from "./animated-button";
 import { useItemImage } from "app/hooks/use-item-image";
 import { usePx } from "app/hooks/use-px";
-import { getItemToolFromId } from "lib/utils";
+import { getItemConfigFromId } from "lib/utils";
 import { CategoryBar } from "./category-bar";
 
 export function Frame() {
@@ -192,10 +192,10 @@ export function Frame() {
 					/>
 
 					{items.mapFiltered(({ id, stack }) => {
-						// This whole function block may not be very performant because of the getItemToolFromId call
+						// This whole function block may not be very performant because of the getItemConfigFromId call
 						if (
 							categorySelected !== undefined &&
-							getItemToolFromId(id).itemCategory.Value !== categorySelected
+							getItemConfigFromId(id).itemCategory.Value !== categorySelected
 						) {
 							return;
 						}

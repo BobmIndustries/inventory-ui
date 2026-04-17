@@ -1,4 +1,4 @@
-import { HttpService, Players, ReplicatedStorage } from "@rbxts/services";
+import { HttpService, Players, ServerStorage } from "@rbxts/services";
 import { promiseTree } from "@rbxts/validate-tree";
 import { dataCheck, remotes } from "network";
 import { producer } from "producer";
@@ -56,9 +56,9 @@ remotes.equipItem.connect((player, item) => {
 		return;
 	}
 
-	const tool = findTool(ReplicatedStorage.items, item)?.Clone();
+	const tool = findTool(ServerStorage.items, item)?.Clone();
 
-	assert(tool, `Tool ${item} not found in ReplicatedStorage.items`);
+	assert(tool, `Tool ${item} not found in ServerStorage.items`);
 
 	producer.equipItem(tostring(player.UserId), item);
 

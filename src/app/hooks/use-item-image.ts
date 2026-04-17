@@ -1,5 +1,5 @@
 import { useEffect, useState } from "@rbxts/react";
-import { getItemToolFromId } from "lib/utils";
+import { getItemConfigFromId } from "lib/utils";
 
 export function useItemImage(id: number) {
 	const [imageId, setImageId] = useState<string>();
@@ -10,7 +10,7 @@ export function useItemImage(id: number) {
 			return;
 		}
 
-		const item = getItemToolFromId(id);
+		const item = getItemConfigFromId(id);
 
 		setImageId(item.itemImage.Value);
 	}, [id]);

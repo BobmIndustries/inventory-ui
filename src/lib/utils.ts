@@ -1,9 +1,9 @@
 import { ReplicatedStorage } from "@rbxts/services";
-import { ItemTool } from "typedefs";
+import { ItemConfig } from "typedefs";
 
-export function getItemToolFromId(id: number) {
-	for (const item of ReplicatedStorage.items.GetDescendants()) {
-		if (!item.IsA("Tool")) {
+export function getItemConfigFromId(id: number) {
+	for (const item of ReplicatedStorage.items.GetChildren()) {
+		if (!item.IsA("Configuration")) {
 			continue;
 		}
 
@@ -14,7 +14,7 @@ export function getItemToolFromId(id: number) {
 		}
 
 		if (itemId === id) {
-			return item as ItemTool;
+			return item as ItemConfig;
 		}
 	}
 

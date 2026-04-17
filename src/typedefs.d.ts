@@ -1,6 +1,6 @@
 export type ItemList = Array<{ id: number; name: string; stack: number }>;
 
-export interface ItemTool extends Tool {
+export interface ItemConfig extends Configuration {
 	itemImage: StringValue;
 	itemCategory: StringValue;
 }
